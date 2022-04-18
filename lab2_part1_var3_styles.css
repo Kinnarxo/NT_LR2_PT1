@@ -1,0 +1,43 @@
+#main_middle	{
+	position: absolute;
+	height:100%;
+	width: 50%;
+	left:25%;
+	background-color: #ddd;
+	box-shadow: 0 0 20px black;	
+}
+
+body	{
+	margin:0;
+	background-color: #555;
+}
+
+h1	{
+	margin: 40px;
+}
+
+div.innerdiv	{
+	background-color: #fff;
+	box-shadow: 0 0 4px black;
+	margin: 20px;
+	width: 50%;
+	overflow:hidden;
+}
+
+form > *	{
+	margin: 5px;
+}
+
+input[type="text"]	{
+	width: 300px;
+}
+
+.but_get	{
+	box-shadow: inset 4px 0 red;
+	margin: 5px;
+}
+
+.but_post	{
+	box-shadow: inset -4px 0 blue;
+	margin: 5px;
+}

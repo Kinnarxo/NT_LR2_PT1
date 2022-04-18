@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Узнайте города в нашей БД по номеру региона!</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link href="lab2_part1_var3_styles.css" rel="stylesheet" type="text/css">
+		<script src="jquery-3.6.0.min.js"></script>
+		<script src="jquery-ui.min.js"></script>
+		<script>
+			$(function()	{
+				$("#post_form1").click(send_frm1_postmet);
+			});
+			function send_frm1_postmet()	{
+				var postbody = $("#form1").serialize();
+				$.ajax(	{
+					url:"test.php",
+					type:"POST",
+					data:postbody,
+					success: function(){console.log(postbody);alert('USPEH');},
+					error: function(){console.log(postbody);alert('PROVAL');}
+				});
+			};
+		</script>
+	</head>
+	<body>
+		<div id="main_middle">
+			<h1>Поиск города по региону</h1>
+			<div class="innerdiv">
+				<form action="test.php" method="GET" id="form1">
+					<input type="text" name="substr" required placeholder="Подстрока, содержащаяся в имени региона"><br>
+					<input type="text" name="regionum" required placeholder="Номер региона"><br>
+					<button class="but_get" form="form1" type="submit"><legend title="Метод GET">Результат</legend></button>
+				</form>
+				<button class="but_post" id="post_form1"><legend title="Метод POST">Результат</legend></button>
+			<div>
+		</div>
+	</body>
+</html>
