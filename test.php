@@ -2,7 +2,7 @@
     if (array_key_exists("substr", $_GET)) $substr = $_GET["substr"];
     else $substr = "";
     if (array_key_exists("regionum", $_GET)) $regionum = $_GET["regionum"];
-    else $regionum = "";
+    else $regionum = "2";
     if (!ctype_digit($regionum))
     {
         echo "В поле <em>Регион</em> введено неверное значение.<br>";
@@ -20,7 +20,7 @@
         fseek($f, SEEK_SET);
         flock($f, LOCK_EX);
         $line = fgets($f);
-        while ($line != false){
+        while ($line != false){         //Помещаем данные из файла в массив[регион][город]
             $buf = explode(",", $line);
             $cities_regs[intval($buf[1])][] = $buf[0];
             $line = fgets($f);
@@ -32,10 +32,10 @@
             $len = count($cities_regs[$regionum]);
             for ($i = 0; $i < $len; $i++)
             {
-                if (strpos($cities_regs[$regionum][$i], $substr) != false) $strout .= "<option>" . $cities_regs[$regionum][$i] . "</option>";
+                if ($substr == "" OR strpos($cities_regs[$regionum][$i], $substr) != false) $strout .= "<option>" . $cities_regs[$regionum][$i] . "</option>";
             }
-            $strout .= "</select><br>";
-            echo $strout;
+            if ($strout == "<br><select><option disabled selected>Выберите город</option>") echo "В $regionum регионе не найдено городов.<br>";
+            else {$strout .= "</select><br>";echo $strout;}
         }
         else
         {
