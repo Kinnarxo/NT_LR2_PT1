@@ -2,8 +2,16 @@
     if (array_key_exists("substr", $_GET)) $substr = $_GET["substr"];
     else $substr = "";
     if (array_key_exists("regionum", $_GET)) $regionum = $_GET["regionum"];
-    else $regionum = "1";
-    if (!file_exists("city_region.csv")) echo "Файл данных отсутствует";
+    else $regionum = "";
+    if (!ctype_digit($regionum))
+    {
+        echo "В поле <em>Регион</em> введено неверное значение.<br>";
+    }
+    if (!ctype_alpha($substr))
+    {
+        echo "В поле <em>Подстрока</em> введено неверное значение.<br>";
+    }
+    if (!file_exists("city_region.csv")) echo "Файл данных отсутствует<br>";
     else
     {
         $cities_regs = array();
@@ -24,14 +32,14 @@
             $len = count($cities_regs[$regionum]);
             for ($i = 0; $i < $len; $i++)
             {
-                $strout .= "<option>" . $cities_regs[$regionum][$i] . "</option>";
+                if (strpos($cities_regs[$regionum][$i], $substr) != false) $strout .= "<option>" . $cities_regs[$regionum][$i] . "</option>";
             }
             $strout .= "</select><br>";
             echo $strout;
         }
         else
         {
-            echo "В $regionum регионе не найдено городов.";
+            echo "В $regionum регионе не найдено городов.<br>";
         }
         foreach ($cities_regs as $k => $v)
         {
