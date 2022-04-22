@@ -9,16 +9,13 @@
 		<script>
 			$(function()	{
 				$("#post_form1").click(send_frm1_postmet);
+				$("#get_form1").click(send_frm1_getmet);
 			});
+			function send_frm1_getmet()	{
+				$("#city_choose").load("test.php", $("#form1").serialize());
+			};
 			function send_frm1_postmet()	{
-				var postbody = $("#form1").serialize();
-				$.ajax(	{
-					url:"test.php",
-					type:"POST",
-					data:postbody,
-					success: function(){console.log(postbody);alert('USPEH');},
-					error: function(){console.log(postbody);alert('PROVAL');}
-				});
+				$.post("test.php", $("#form1").serialize(), function(result){$("#city_choose").html(result);});
 			};
 		</script>
 	</head>
@@ -26,12 +23,15 @@
 		<div id="main_middle">
 			<h1>Поиск города по региону</h1>
 			<div class="innerdiv">
-				<form action="test.php" method="GET" id="form1">
+				<form action="test.php" method="GET" id="form1" enctype="text/plain" accept-charset="UTF-8">
 					<input type="text" name="substr" required placeholder="Подстрока, содержащаяся в имени региона"><br>
 					<input type="text" name="regionum" required placeholder="Номер региона"><br>
-					<button class="but_get" form="form1" type="submit"><legend title="Метод GET">Результат</legend></button>
 				</form>
+				<button class="but_get" id="get_form1"><legend title="Метод GET">Результат</legend></button>
 				<button class="but_post" id="post_form1"><legend title="Метод POST">Результат</legend></button>
+			</div>
+			<div class="innerdiv" id="city_choose">
+
 			</div>
 		</div>
 	</body>

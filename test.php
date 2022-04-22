@@ -1,21 +1,25 @@
 <?php
-    if (array_key_exists("substr", $_GET)) $substr = $_GET["substr"];
+    $Glob_Arr = array();
+    if ($_SERVER['REQUEST_METHOD'] == 'GET')
+    {
+        $Glob_Arr = &$_GET;
+    }
+    elseif ($_SERVER['REQUEST_METHOD'] == 'POST')
+    {
+        $Glob_Arr = &$_POST;
+    }
+    if (array_key_exists("substr", $Glob_Arr)) $substr = $Glob_Arr["substr"];
     else $substr = "";
-    if (array_key_exists("regionum", $_GET)) $regionum = $_GET["regionum"];
-    else $regionum = "2";
+    if (array_key_exists("regionum", $Glob_Arr)) $regionum = $Glob_Arr["regionum"];
+    else $regionum = "";
     if (!ctype_digit($regionum))
     {
-        echo "В поле <em>Регион</em> введено неверное значение.<br>";
-    }
-    if (!ctype_alpha($substr))
-    {
-        echo "В поле <em>Подстрока</em> введено неверное значение.<br>";
+        echo "В поле <em>Регион</em> введено неверное значение $regionum, $substr.<br>";
     }
     if (!file_exists("city_region.csv")) echo "Файл данных отсутствует<br>";
     else
     {
         $cities_regs = array();
-        echo "Файл данных найден<br>";
         $f = fopen("city_region.csv", 'r');
         fseek($f, SEEK_SET);
         flock($f, LOCK_EX);
@@ -28,27 +32,26 @@
         ksort($cities_regs);
         if (key_exists($regionum, $cities_regs))
         {
-            $strout = "<br><select><option disabled selected>Выберите город</option>";
+            $strout = "<select style='margin: 15px 10px 15px;background-color: mediumaquamarine; color: white;'><option disabled selected>Выберите город</option>";
             $len = count($cities_regs[$regionum]);
             for ($i = 0; $i < $len; $i++)
             {
                 if ($substr == "" OR strpos($cities_regs[$regionum][$i], $substr) != false) $strout .= "<option>" . $cities_regs[$regionum][$i] . "</option>";
             }
-            if ($strout == "<br><select><option disabled selected>Выберите город</option>") echo "В $regionum регионе не найдено городов.<br>";
-            else {$strout .= "</select><br>";echo $strout;}
+            if ($strout == "<select style='margin: 15px 10px 15px;'><option disabled selected>Выберите город</option>")
+                echo "<br><span style='margin: 10px;'>В $regionum регионе не найдено городов, название которых содержит '$substr'.</span><br><br>";
+            else echo $strout . "</select><br><script>\$('select').mouseover(function (){\$('select').css('background-color', 'white').css('color', 'black')})</script>";
         }
         else
         {
-            echo "В $regionum регионе не найдено городов.<br>";
+            echo "<span style='margin: 15px 10px 15px;'>В $regionum регионе не найдено городов.</span><br>";
         }
-        foreach ($cities_regs as $k => $v)
+        /*foreach ($cities_regs as $k => $v)
         {
             echo $k . ". ";
             foreach ($v as $val) echo $val . " ";
             echo "<br>";
-        }
-
+        }*/
         fclose($f);
     }
-
 ?>
